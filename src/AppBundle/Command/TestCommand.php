@@ -38,6 +38,6 @@ class TestCommand extends ContainerAwareCommand
         /** @var Shift $shift */
         $shift = $repository->findOneBy([], ['id' => 'DESC']);
 
-        echo sprintf('Shift is %s', $shift->getPeriod());
+        $output->writeln(sprintf('Shift is %s', $shift->getPeriod()));
     }
 }

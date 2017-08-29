@@ -16,7 +16,7 @@ final class DateRangeType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return sprintf('[%s, %s]',
+        return sprintf('[%s, %s)', // Postgres representation of daterange
             $value->getStartDate()->format(self::DATABASE_DATE_FORMAT),
             $value->getEndDate()->format(self::DATABASE_DATE_FORMAT)
         );
@@ -24,6 +24,7 @@ final class DateRangeType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        // splitting database value ["2010-10-10", "2011-11-11") into two date strings
         [$startDate, $endDate] = explode(',', str_replace(['[', ')'], '', $value));
 
         return new Period(
@@ -35,11 +36,6 @@ final class DateRangeType extends Type
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         return 'daterange';
-    }
-
-    public static function getType($name)
-    {
-        return self::DATE_RANGE_TYPE;
     }
 
     public function getName()
